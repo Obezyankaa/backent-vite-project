@@ -16,6 +16,8 @@ app.use((req, res, next) => {
 // Указываем Express раздавать файлы из папки dist
 app.use(express.static(path.join(__dirname, "dist")));
 
+app.get("/", (req, res) => res.send("Express on Vercel"));
+
 // Статические файлы для PDF (если они есть)
 app.use("/pdf-files", express.static(path.join(__dirname, "pdf-files")));
 
