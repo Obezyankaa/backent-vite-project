@@ -1,6 +1,5 @@
 import express from "express";
 import path from "path";
-console.log(123);
 
 const app = express();
 const port = 3000;
@@ -17,6 +16,9 @@ app.use((req, res, next) => {
 app.use(express.static(path.join(__dirname, "dist")));
 
 app.get("/", (req, res) => res.send("Express on Vercel"));
+app.get("/about", (req, res) => {
+  res.send("About route 🎉 ");
+});
 
 // Статические файлы для PDF (если они есть)
 app.use("/pdf-files", express.static(path.join(__dirname, "pdf-files")));
@@ -29,3 +31,5 @@ app.get("*", (req, res) => {
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
+
+console.log('сервер старт');
