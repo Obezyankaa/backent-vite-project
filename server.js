@@ -34,17 +34,15 @@ app.get("/api/data", (req, res) => {
   res.json(data);
 });
 
-app.get("/api/pdf", (req, res) => {
-  const pdfPath = path.join(__dirname, "pdf-files", "one.pdf");
-  res.sendFile(pdfPath, (err) => {
-    if (err) {
-      console.error("Ошибка при отправке PDF файла:", err);
-      res.status(500).send("Ошибка при отправке файла");
-    }
-  });
+// Раздаём статические файлы из папок 'web' и 'build'
+app.use('/web', express.static(path.join(__dirname, 'web')));
+app.use('/build', express.static(path.join(__dirname, 'web', 'build')));
+
+// Маршрут для PDF файла
+app.get('/api/pdf', (req, res) => {
+  const pdfPath = path.join(__dirname, 'pdf-files', 'one.pdf');
+  res.sendFile(pdfPath);
 });
-
-
 
 // Все остальные запросы направляем на индексный файл React приложения
 app.get("*", (req, res) => {
