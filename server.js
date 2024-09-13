@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors"; // Импортируем CORS
 import path from "path";
 
 const app = express();
@@ -6,22 +7,44 @@ const port = 3000;
 
 const __dirname = path.resolve();
 
+// Включаем CORS для всех запросов
+app.use(cors());
+
 // Логирование всех входящих запросов
 app.use((req, res, next) => {
   console.log(`Incoming request: ${req.method} ${req.url}`);
   next(); // передаем управление следующему middleware или маршруту
 });
 
-// Указываем Express раздавать файлы из папки dist
 app.use(express.static(path.join(__dirname, "dist")));
 
 app.get("/", (req, res) => res.send("Express on Vercel"));
+
 app.get("/about", (req, res) => {
   res.send("About route 🎉 ");
 });
 
-// Статические файлы для PDF (если они есть)
-app.use("/pdf-files", express.static(path.join(__dirname, "pdf-files")));
+app.get("/api/data", (req, res) => {
+  const data = {
+    message: "Hello from the server!",
+    timestamp: new Date(),
+    status: "success",
+  };
+
+  res.json(data);
+});
+
+app.get("/api/pdf", (req, res) => {
+  const pdfPath = path.join(__dirname, "pdf-files", "one.pdf");
+  res.sendFile(pdfPath, (err) => {
+    if (err) {
+      console.error("Ошибка при отправке PDF файла:", err);
+      res.status(500).send("Ошибка при отправке файла");
+    }
+  });
+});
+
+
 
 // Все остальные запросы направляем на индексный файл React приложения
 app.get("*", (req, res) => {
@@ -32,4 +55,4 @@ app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
 
-console.log('сервер старт');
+console.log("сервер старт");
