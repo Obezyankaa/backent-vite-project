@@ -6,6 +6,7 @@ const app = express();
 const port = 3000;
 
 const __dirname = path.resolve();
+// console.log(123);
 
 // Включаем CORS для всех запросов
 app.use(cors());
