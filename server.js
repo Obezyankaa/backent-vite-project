@@ -14,15 +14,32 @@ const __dirname = path.resolve();
 
 // Настройка CORS
 const corsOptions = {
-  origin: ["http://localhost:5173", "http://marks-pro.ru"], // Разрешаем только локальный хост и продакшен-домен
+  origin: [
+    "http://localhost:5173",
+    "http://marks-pro.ru",
+    "https://backent-vite-project.vercel.app",
+  ],
   optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
 
-
 // Логирование всех входящих запросов
 app.use((req, res, next) => {
   console.log(`Incoming request: ${req.method} ${req.url}`);
+  next();
+});
+
+app.use((req, res, next) => {
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://backent-vite-project.vercel.app"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, DELETE, OPTIONS"
+  );
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
   next();
 });
 
@@ -44,7 +61,7 @@ app.get("/api/stream-pdf", async (req, res) => {
   // Используем переменную окружения для получения полного URL
   const fullUrl = fileUrl.startsWith("http")
     ? fileUrl
-    : `${pythonApiUrl}${fileUrl}`;
+    : `${process.env.PYTHON_API_URL}${fileUrl}`;
 
   try {
     const response = await axios({
