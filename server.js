@@ -18,6 +18,7 @@ const corsOptions = {
     "http://localhost:5173",
     "http://marks-pro.ru",
     "https://backent-vite-project.vercel.app",
+    "https://vite-project-omega-orcin.vercel.app",
   ],
   optionsSuccessStatus: 200,
 };
